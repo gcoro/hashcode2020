@@ -15,23 +15,26 @@ const parseInput = (contentToParse) => {
 	const start = now();
 	const lines = contentToParse.split('\n');
 	const [totalBooks, totalLibraries, totalDays] = lines[0].split(' ');
-	const books = lines[1].split(' ').map((el, index) => ({ idBook: index, score: el }));
+	const books = lines[1].split(' ')
+		.map((el, index) => ({ idBook: index, score: +el }))
+		.sort((a, b) => b.score - a.score); // sorts from most score to less
+
 	const libraries = [];
 	let index = 0;
 
 	for (let i = 0; index < +totalLibraries; i = i + 2) {
 		const idLibrary = index;
 		const [numberOfBooks, signupDays, booksInADay] = lines[i + 2].split(' ');
-		const booksInLibrary = lines[i + 3].split(' ');
+		const booksInLibrary = lines[i + 3].split(' ').map(el => +el);
 		libraries.push({
-			idLibrary, signupDays, booksInADay, booksInLibrary
+			idLibrary, signupDays: +signupDays, booksInADay: +booksInADay, booksInLibrary
 		});
 		index++;
 	}
 
 	const end = now();
 	console.log(`parseInput took ${(end - start).toFixed(3)} ms`);
-	return { totalDays, books, libraries };
+	return { totalDays: +totalDays, books, libraries };
 };
 
 /*
