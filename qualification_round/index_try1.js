@@ -82,7 +82,7 @@ const libraryScores = (totalDays, data) => {
 	for(let i=0, l=result.length; i<l; i++) {
 		const {signupDays, booksInLibrary, booksInADay} = result[i]
 		const daysUtils = totalDays - signupDays;
-		const maxIdx = Math.min([booksInLibrary.length-1, (booksInADay * daysUtils)]);
+		const maxIdx = Math.min(booksInLibrary.length-1, (booksInADay * daysUtils));
 
 		const score = booksInLibrary.slice(0, maxIdx).reduce((accumulator, currentValue) => accumulator + parseInt(currentValue.score), 0);
 
@@ -114,9 +114,9 @@ const getResult = (totalDays, libraries) => {
 		return b.totScore - a.totScore;
 	});
 
-	// let sortedLibrariesFromGiorgio = libraryScores(totalDays, sortedLibraries);
+	let sortedLibrariesFromGiorgio = libraryScores(totalDays, sortedLibraries);
 
-	sortedLibraries.forEach(lib => {
+	sortedLibrariesFromGiorgio.forEach(lib => {
 		lib.booksInLibrary = lib.booksInLibrary.filter(book => { // only keeps useful books (not scanned)
 			let keep = true;
 			if (isBookScanned(book.idBook)) keep = false;
@@ -125,7 +125,7 @@ const getResult = (totalDays, libraries) => {
 		});
 	});
 
-	let filteredLibraries = sortedLibraries.filter(lib => lib.booksInLibrary.length !== 0);
+	let filteredLibraries = sortedLibrariesFromGiorgio.filter(lib => lib.booksInLibrary.length !== 0);
 
 	console.log(JSON.stringify(filteredLibraries));
 
