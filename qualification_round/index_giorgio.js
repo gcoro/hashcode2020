@@ -127,22 +127,23 @@ const getResult = (totalDays, libraries) => {
 	const start = now();
 	console.log(JSON.stringify({ totalDays, libraries }));
 
+	const sortedLibraries = orderBySignupDays(libraries);
+	// writeToCustomFile(sortedLibraries, 'sorted');
 
+	const libraryScore = libraryScores(totalDays, sortedLibraries);
+	// writeToCustomFile(libraryScore, 'libraryScores');
+
+/*
 	const results = [
 		{ idLibrary: 4, books: [2, 3, 4] },
 		{ idLibrary: 2, books: [5, 6] },
 		{ idLibrary: 1, books: [7] }
 	];
-
-	const sortedLibraries = orderBySignupDays(libraries);
-	writeToCustomFile(sortedLibraries, 'sorted');
-
-	const libraryScore = libraryScores(totalDays, sortedLibraries);
-	writeToCustomFile(libraryScore, 'libraryScores');
-
+	*/
 	const end = now();
 	console.log(`getResult took ${(end - start).toFixed(3)} ms`);
-	return results;
+	return libraryScore.map(item => {return {idLibrary: item.idLibrary, books: item.booksInLibrary.map(book => book.idBook)}});
+
 };
 
 const content = readContent();
