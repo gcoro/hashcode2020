@@ -49,7 +49,8 @@ const parseInput = (contentToParse) => {
 		const idLibrary = index;
 		const [numberOfBooks, signupDays, booksInADay] = lines[i + 2].split(' ');
 		const booksInLibrary = lines[i + 3].split(' ')
-			.map(el => ({ idBook: +el, score: +books[+el] }));
+			.map(el => ({ idBook: +el, score: +books[+el] }))
+			.sort((a, b) => b.score - a.score); // sorts from most score to less
 		libraries.push({
 			idLibrary, signupDays: +signupDays, booksInADay: +booksInADay, booksInLibrary
 		});
@@ -58,7 +59,7 @@ const parseInput = (contentToParse) => {
 
 	const end = now();
 	console.log(`parseInput took ${(end - start).toFixed(3)} ms`);
-	return { totalDays: +totalDays, books, libraries };
+	return { totalDays: +totalDays, libraries };
 };
 
 const parseOutput = (data) => {
@@ -75,20 +76,21 @@ const parseOutput = (data) => {
 	return rows;
 }
 
-/**
- * 
- * return = [
- * 		{ idLibrary, books: [<idBook>] },....
- * ]
- * 
- * @param {*} totalDays 
- * @param {*} books 
- * @param {*} libraries 
- */
-const getResult = (totalDays, books, libraries) => {
+const getResult = (totalDays, libraries) => {
+	/**
+	 * 
+	 * return = [
+	 * 		{ idLibrary, books: [<idBook>] },....
+	 * ]
+	 * 
+	 * @param {*} totalDays 
+	 * @param {*} books 
+	 * @param {*} libraries 
+	 */
 	const start = now();
-	console.log(JSON.stringify({ totalDays, books, libraries }));
-	// todo
+	console.log(JSON.stringify({ totalDays, libraries }));
+
+
 	const results = [
 		{ idLibrary: 4, books: [2, 3, 4] },
 		{ idLibrary: 2, books: [5, 6] },
@@ -100,7 +102,7 @@ const getResult = (totalDays, books, libraries) => {
 };
 
 const content = readContent();
-const { totalDays, books, libraries } = parseInput(content);
-const result = getResult(totalDays, books, libraries);
+const { totalDays, libraries } = parseInput(content);
+const result = getResult(totalDays, libraries);
 const parsedOutput = parseOutput(result);
 writeToFile(parsedOutput);
