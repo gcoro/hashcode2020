@@ -3,6 +3,13 @@ const name = path.split('/')[path.split('/').length - 1].split('.')[0];
 const fs = require('fs');
 const now = require('performance-now');
 
+/**
+ * scannedBooks = {
+ * 	[idBook]: {}
+ * }
+ */
+const scannedBookes = {}
+
 const readContent = () => {
 	return fs.readFileSync(path, 'utf8');
 };
@@ -53,6 +60,16 @@ const parseOutput = (data) => {
 }
 
 const getResult = (totalDays, libraries) => {
+/**
+ * 
+ * return = [
+ * 		{ idLibrary, books: [<idBook>] },....
+ * ]
+ * 
+ * @param {*} totalDays 
+ * @param {*} books 
+ * @param {*} libraries 
+ */
 	const start = now();
 	console.log(JSON.stringify({ totalDays, libraries }));
 
