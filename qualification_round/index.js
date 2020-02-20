@@ -22,8 +22,8 @@ const parseInput = (contentToParse) => {
 	const start = now();
 	const lines = contentToParse.split('\n');
 	const [totalBooks, totalLibraries, totalDays] = lines[0].split(' ');
-	const books = lines[1].split(' ')
-		.map((el, index) => ({ idBook: index, score: +el }));
+	const books = lines[1].split(' ');
+	//	.map((el, index) => ({ idBook: index, score: +el })); // nb if you uncomment, it breaks later
 	// .sort((a, b) => b.score - a.score); // sorts from most score to less
 
 	const libraries = [];
@@ -33,7 +33,7 @@ const parseInput = (contentToParse) => {
 		const idLibrary = index;
 		const [numberOfBooks, signupDays, booksInADay] = lines[i + 2].split(' ');
 		const booksInLibrary = lines[i + 3].split(' ')
-			// .map(el => ({ idBook: +el, score: }));
+			.map(el => ({ idBook: +el, score: +books[+el] }));
 		libraries.push({
 			idLibrary, signupDays: +signupDays, booksInADay: +booksInADay, booksInLibrary
 		});
