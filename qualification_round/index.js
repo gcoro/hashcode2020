@@ -10,6 +10,22 @@ const now = require('performance-now');
  */
 const scannedBookes = {}
 
+/**
+ * check if book was previously scanned
+ * @param {*} idBook 
+ */
+const isBookScanned = (idBook) => {
+	return !!scannedBookes[idBook]
+}
+
+/**
+ * set book as scanned
+ * @param {*} idBook 
+ */
+const setBookScanned = (idBook) => {
+	scannedBookes[idBook] = {}
+}
+
 const readContent = () => {
 	return fs.readFileSync(path, 'utf8');
 };
