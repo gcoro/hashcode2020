@@ -13,10 +13,25 @@ const writeToFile = (rows) => {
 
 const parseInput = (contentToParse) => {
 	const start = now();
+	const lines = contentToParse.split('\n');
+	const [totalBooks, totalLibraries, totalDays] = lines[0].split(' ');
+	const books = lines[1].split(' ').map((el, index) => ({ idBook: index, score: el }));
+	const libraries = [];
+	let index = 0;
+
+	for (let i = 0; index < +totalLibraries; i = i + 2) {
+		const idLibrary = index;
+		const [numberOfBooks, signupDays, booksInADay] = lines[i + 2].split(' ');
+		const booksInLibrary = lines[i + 3].split(' ');
+		libraries.push({
+			idLibrary, signupDays, booksInADay, booksInLibrary
+		});
+		index++;
+	}
 
 	const end = now();
 	console.log(`parseInput took ${(end - start).toFixed(3)} ms`);
-	return // todo
+	return { totalDays, books, libraries };
 };
 
 const parseOutput = (content) => {
@@ -26,8 +41,10 @@ const parseOutput = (content) => {
 	return // todo
 };
 
-const getResult = () => {
+const getResult = (totalDays, books, libraries) => {
 	const start = now();
+	console.log(JSON.stringify({ totalDays, books, libraries }));
+
 	// todo
 	const end = now();
 	console.log(`getResult took ${(end - start).toFixed(3)} ms`);
@@ -35,7 +52,7 @@ const getResult = () => {
 };
 
 const content = readContent();
-const a = parseInput(content);
-const result = getResult(a);
+const { totalDays, books, libraries } = parseInput(content);
+const result = getResult(totalDays, books, libraries);
 const parsedOutput = parseOutput(result);
 writeToFile(parsedOutput);
