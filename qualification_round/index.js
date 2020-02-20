@@ -34,21 +34,42 @@ const parseInput = (contentToParse) => {
 	return { totalDays, books, libraries };
 };
 
+/*
 const parseOutput = (content) => {
 	const start = now();
 	const end = now();
 	console.log(`parseOutput took ${(end - start).toFixed(3)} ms`);
 	return // todo
 };
+*/
+
+const parseOutput = (data) => {
+	const start = now();
+	const rows = [];
+	rows.push(data.length);
+	for (let i=0, l=data.length; i<l; i++) {
+		const {idLibrary, books} = data[i];
+		rows.push(`${idLibrary} ${books.length}`)
+		rows.push(books.join(' '))
+	}
+	const end = now();
+	console.log(`parsedOutput took ${(end - start).toFixed(3)} ms`);
+	return rows;
+}
 
 const getResult = (totalDays, books, libraries) => {
 	const start = now();
 	console.log(JSON.stringify({ totalDays, books, libraries }));
-
+	// todo
+	const results = [
+		{idLibrary: 4, books: [2,3,4]},
+		{idLibrary: 2, books: [5,6]},
+		{idLibrary: 1, books: [7]}
+	];
 	// todo
 	const end = now();
 	console.log(`getResult took ${(end - start).toFixed(3)} ms`);
-	return // todo
+	return results// todo
 };
 
 const content = readContent();
