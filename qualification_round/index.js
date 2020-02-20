@@ -16,8 +16,8 @@ const parseInput = (contentToParse) => {
 	const lines = contentToParse.split('\n');
 	const [totalBooks, totalLibraries, totalDays] = lines[0].split(' ');
 	const books = lines[1].split(' ')
-		.map((el, index) => ({ idBook: index, score: +el }))
-		.sort((a, b) => b.score - a.score); // sorts from most score to less
+		.map((el, index) => ({ idBook: index, score: +el }));
+	// .sort((a, b) => b.score - a.score); // sorts from most score to less
 
 	const libraries = [];
 	let index = 0;
@@ -25,7 +25,8 @@ const parseInput = (contentToParse) => {
 	for (let i = 0; index < +totalLibraries; i = i + 2) {
 		const idLibrary = index;
 		const [numberOfBooks, signupDays, booksInADay] = lines[i + 2].split(' ');
-		const booksInLibrary = lines[i + 3].split(' ').map(el => +el);
+		const booksInLibrary = lines[i + 3].split(' ')
+			// .map(el => ({ idBook: +el, score: }));
 		libraries.push({
 			idLibrary, signupDays: +signupDays, booksInADay: +booksInADay, booksInLibrary
 		});
@@ -37,21 +38,12 @@ const parseInput = (contentToParse) => {
 	return { totalDays: +totalDays, books, libraries };
 };
 
-/*
-const parseOutput = (content) => {
-	const start = now();
-	const end = now();
-	console.log(`parseOutput took ${(end - start).toFixed(3)} ms`);
-	return // todo
-};
-*/
-
 const parseOutput = (data) => {
 	const start = now();
 	const rows = [];
 	rows.push(data.length);
-	for (let i=0, l=data.length; i<l; i++) {
-		const {idLibrary, books} = data[i];
+	for (let i = 0, l = data.length; i < l; i++) {
+		const { idLibrary, books } = data[i];
 		rows.push(`${idLibrary} ${books.length}`)
 		rows.push(books.join(' '))
 	}
@@ -65,14 +57,13 @@ const getResult = (totalDays, books, libraries) => {
 	console.log(JSON.stringify({ totalDays, books, libraries }));
 	// todo
 	const results = [
-		{idLibrary: 4, books: [2,3,4]},
-		{idLibrary: 2, books: [5,6]},
-		{idLibrary: 1, books: [7]}
+		{ idLibrary: 4, books: [2, 3, 4] },
+		{ idLibrary: 2, books: [5, 6] },
+		{ idLibrary: 1, books: [7] }
 	];
-	// todo
 	const end = now();
 	console.log(`getResult took ${(end - start).toFixed(3)} ms`);
-	return results// todo
+	return results;
 };
 
 const content = readContent();
