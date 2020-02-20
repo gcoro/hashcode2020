@@ -69,12 +69,29 @@ const parseOutput = (data) => {
 	for (let i = 0, l = data.length; i < l; i++) {
 		const { idLibrary, books } = data[i];
 		rows.push(`${idLibrary} ${books.length}`);
-		rows.push(books.join(' '));
+		if(books.length > 0) rows.push(books.join(' '));
 	}
 	const end = now();
 	console.log(`parsedOutput took ${(end - start).toFixed(3)} ms`);
 	return rows;
 };
+
+const libraryScores = (totalDays, data) => {
+	const result = JSON.parse(JSON.stringify(data))
+
+	for(let i=0, l=result.length; i<l; i++) {
+		const {signupDays, booksInLibrary, booksInADay} = result[i]
+		const daysUtils = totalDays - signupDays;
+		const maxIdx = Math.min([booksInLibrary.length-1, (booksInADay * daysUtils)]);
+
+		const score = booksInLibrary.slice(0, maxIdx).reduce((accumulator, currentValue) => accumulator + parseInt(currentValue.score), 0);
+
+		result[i].daysUtils = daysUtils;
+		result[i].scoreInDaysUtils = score
+	}
+
+	return result.sort((a,b) => b.scoreInDaysUtils - a.scoreInDaysUtils);
+}
 
 const getResult = (totalDays, libraries) => {
 	/**
@@ -90,14 +107,34 @@ const getResult = (totalDays, libraries) => {
 	const start = now();
 	// console.log(JSON.stringify({ totalDays, libraries }));
 
-	const sortedLibraries = libraries.sort((a, b) => a.signupDays - b.signupDays);
+	const librariesWithMoreInfo = libraries.map(el =>
+		({ ...el, totScore: el.booksInLibrary.reduce((acc, el) => el.score + acc, 0) }));
 
-	const results = sortedLibraries.map(el => ({
-		signupDays: el.signupDays,
+	let sortedLibraries = librariesWithMoreInfo.sort((a, b) => {
+		return b.totScore - a.totScore;
+	});
+
+	// let sortedLibrariesFromGiorgio = libraryScores(totalDays, sortedLibraries);
+
+	sortedLibraries.forEach(lib => {
+		lib.booksInLibrary = lib.booksInLibrary.filter(book => { // only keeps useful books (not scanned)
+			let keep = true;
+			if (isBookScanned(book.idBook)) keep = false;
+			setBookScanned(book.idBook);
+			return keep;
+		});
+	});
+
+	let filteredLibraries = sortedLibraries.filter(lib => lib.booksInLibrary.length !== 0);
+
+	console.log(JSON.stringify(filteredLibraries));
+
+	const results = filteredLibraries.map(el => ({
 		idLibrary: el.idLibrary,
 		books: el.booksInLibrary.map(book => book.idBook)
 	}));
-	printDebugOutput(results, 'debug.json');
+
+	// printDebugOutput(results, 'debug.json');
 
 	const end = now();
 	console.log(`getResult took ${(end - start).toFixed(3)} ms`);
