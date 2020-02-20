@@ -26,6 +26,10 @@ const setBookScanned = (idBook) => {
 	scannedBookes[idBook] = {}
 }
 
+const printDebugOutput = (results, filename) => {
+	fs.writeFileSync('./' + filename, JSON.stringify(results), 'utf8');
+};
+
 const readContent = () => {
 	return fs.readFileSync(path, 'utf8');
 };
