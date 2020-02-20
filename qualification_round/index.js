@@ -33,7 +33,8 @@ const parseInput = (contentToParse) => {
 		const idLibrary = index;
 		const [numberOfBooks, signupDays, booksInADay] = lines[i + 2].split(' ');
 		const booksInLibrary = lines[i + 3].split(' ')
-			.map(el => ({ idBook: +el, score: +books[+el] }));
+			.map(el => ({ idBook: +el, score: +books[+el] }))
+			.sort((a, b) => b.score - a.score); // sorts from most score to less
 		libraries.push({
 			idLibrary, signupDays: +signupDays, booksInADay: +booksInADay, booksInLibrary
 		});
@@ -60,16 +61,16 @@ const parseOutput = (data) => {
 }
 
 const getResult = (totalDays, libraries) => {
-/**
- * 
- * return = [
- * 		{ idLibrary, books: [<idBook>] },....
- * ]
- * 
- * @param {*} totalDays 
- * @param {*} books 
- * @param {*} libraries 
- */
+	/**
+	 * 
+	 * return = [
+	 * 		{ idLibrary, books: [<idBook>] },....
+	 * ]
+	 * 
+	 * @param {*} totalDays 
+	 * @param {*} books 
+	 * @param {*} libraries 
+	 */
 	const start = now();
 	console.log(JSON.stringify({ totalDays, libraries }));
 
